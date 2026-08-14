@@ -43,11 +43,13 @@
 
 **源代码**：`<HOME>/.dsh/AGENTS.md`（58 行，全量规则，见上文逻辑）。
 
+> **脱敏状态（已实施）**：协议中所有个人路径已参数化为 `<框架目录>` / `<日志目录>` / `<音乐工作区>` 等占位符。
+
 ### 3. 工具链封装 —— Skills（8 个，`<HOME>/.dsh/skills/`）
 
 | Skill | 任务指示 | 逻辑说明 | 源码 |
 |---|---|---|---|
-| **codex-net** | 确保外网可用并提供 curl 下载封装 | 探测 google/drive/github/arxiv 连通性；失败则拉起 ProtonVPN 客户端并轮询等待；curl 带浏览器 UA 与断点续传 | `scripts/codex_net.ps1`（73 行） |
+| **codex-net** | 确保外网可用并提供 curl 下载封装 | 探测 google/drive/github/arxiv 连通性；失败则拉起 VPN 客户端并轮询等待；curl 带浏览器 UA 与断点续传 | `scripts/codex_net.ps1`（73 行） |
 | **deepseek-multi-agent** | 运行主脑规划→子执行器编码→主脑汇总的一键多智能体管线 | 调用 `python -m multi_agent auto`；主脑 `deepseek-v4-pro`、子执行器 `deepseek-v4-flash`；产物落带时间戳目录含 `SUMMARY.md` | `scripts/run_multi_agent.ps1`（14 行） |
 | **subagent-wait** | 阻塞等待一个后台子代理 settle 并取回结果 | 以动态 Cordis 插件形式注册 `subagent_wait` Host 工具：监听 `subagent/end` 事件为权威信号，`agents.get` 轮询兜底，支持超时/取消；返回 `settled/via/stop_reason/result_text` | `plugin_host.js`（141 行，完整可粘贴 `code.host` 函数体） |
 | **audio-transcribe** | 语音转文字（双引擎并行加权） | 封装既有 ASR 实现：faster-whisper + GLM-ASR 并行加权，长音频分片 ≤5 子代理扇出后按序合并；只处理语音，音乐仅给元数据 | `scripts/transcribe.ps1`（11 行） |
@@ -55,6 +57,19 @@
 | **mcp-services** | 经 dsh MCP 客户端接入 Linear/Notion/Zotero | 每个 server 在 `cordis.patch.yml` 加一行（stdio 或 HTTP）；工具名 `mcp__<server>__<tool>`；凭据仅环境变量注入（`!!js` 读 `process.env.*`） | `scripts/mcp.patch.example.yml`（18 行，三服务接入模板） |
 | **multimodal** | 为纯文本模型提供视觉理解 + 语义识别 | 三层：文本层（Windows OCR 中英 + 图像统计 + 文档结构提取）、语义层（人脸检测 + 类型启发式）、场景层（可选视觉模型 hook，未配置则本地回退）；默认 ≤5 并发子代理扇出 OCR/统计/语义后合并 | `SKILL.md`（89 行）+ scripts 族 |
 | **music-render-compose** | 音乐渲染与制作工作台 | FluidSynth+GeneralUser 渲染 MIDI→WAV；风格渲染与 -1dBFS 响度归一；MIDI 演奏层增强（力度/rubato/CC64/CC11/CC1）；MusicGen/MuseCoco 作曲；Web UI（127.0.0.1:8787）8 模块状态 + GPU 显存守卫 | `SKILL.md` + 5 个 ps1 脚本 |
+
+#### 参数化脱敏环境变量约定（已实施）
+
+所有脚本中原先硬编码的个人绝对路径已替换为环境变量 + `$HOME` 回退，发布时仅需设置环境变量即可指向任意部署：
+
+| 脚本 | 环境变量 | 默认回退 |
+|---|---|---|
+| `codex-net/codex_net.ps1` | `NET_VPN_EXE`（VPN 客户端）、`NET_PROBE_URLS`（探测地址） | 不自动拉起 VPN（仅提示） |
+| `deepseek-multi-agent/run_multi_agent.ps1` | `MULTI_AGENT_DIR`（框架目录）、`MULTI_AGENT_PY`（Python） | `$HOME\multi-agent-framework` + PATH python |
+| `audio-transcribe/transcribe.ps1` | `ASR_PYTHON`、`ASR_SCRIPT` | PATH python + `$HOME\.asr\asr.py` |
+| `music-render-compose/*.ps1` | `MUSIC_DIR`（工作区）、`MUSIC_PY`（GPU Python）、`MUSIC_FS`（FluidSynth）、`MUSIC_SF`（SoundFont） | `$HOME\music-workspace` + PATH python + `$HOME\music-tools\...` |
+
+> 修复记录：脱敏过程中发现并修复 4 处脚本 bug——`$args` 自动变量被用作数组名（transcribe/compose_musicgen）、`plugin_host.js` 的 `loop-error` 分支幂等短路导致 `via` 丢失、以及 2 处 Python 解释器未统一解析。全部 9 个 ps1 已通过 PowerShell 语法解析验证。
 
 ### 4. Profile 插件集成 —— web profile
 
@@ -85,6 +100,16 @@
 **逻辑说明**：忽略 `DeepSeek Harness Desktop/`（打包产物，数百 MB 二进制）、`dsh-desktop/node_modules|dist/`、通用日志/系统文件；首次提交 29 个文本文件。
 
 **源代码**：`<WORKSPACE>/.gitignore`（10 行）。
+
+### 7. 附带发现 —— dsh-git-autoinit 插件
+
+**任务指示**：让任意会话/工作区工作目录自动获得 git 仓库（幂等），使侧边栏 Git 面板始终可用。
+
+**逻辑说明**：Host 半插件。挂载时扫描全部既有会话 cwd 与已注册工作区，并监听 `session/created` 覆盖未来会话；对每个目录 `git init`（非工作树时）+ 缺省时回填保守 `.gitignore`（不覆盖已有文件）。`runGit` 用 `spawn('git')` 收集输出、`ensure` 按 cwd 去重合并并发，`sessions.list()` / `workspaceRegistry.list()` 均已核对该两服务真实存在。
+
+**源代码**：`<WORKSPACE>/dsh-git-autoinit/`（`lib/index.js` 122 行 + `cordis.patch.yml` 9 行 + `package.json`，含 `dsh.bundle.patch` 声明，MIT）。
+
+> 归类：**公开易复用**——通用 git 工作区自举模式，可并入「dsh-utils」插件集。已核查无个人信息、API 形状正确。
 
 ---
 
