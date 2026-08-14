@@ -1,25 +1,25 @@
-﻿{
-    "name":  "dsh-git-autoinit",
-    "version":  "0.1.0",
-    "description":  "Global git workspace auto-initialization: every session/workspace working directory gets `git init` (idempotent, conservative .gitignore backfill), so the sidebar Git panel always works.",
-    "type":  "module",
-    "main":  "lib/index.js",
-    "files":  [
-                  "lib/index.js",
-                  "cordis.patch.yml"
-              ],
-    "dsh":  {
-                "bundle":  {
-                               "patch":  "./cordis.patch.yml"
-                           }
-            },
-    "license":  "MIT",
-    "peerDependencies":  {
-                             "@deepseek-ai/cordis":  "^4.0.1"
-                         },
-    "peerDependenciesMeta":  {
-                                 "@deepseek-ai/cordis":  {
-                                                             "optional":  true
-                                                         }
-                             }
+{
+  "name": "dsh-git-autoinit",
+  "version": "0.1.1",
+  "description": "Global git workspace auto-initialization: every session/workspace working directory gets `git init` (idempotent, conservative .gitignore backfill), so the sidebar Git panel always works.",
+  "type": "module",
+  "main": "lib/index.js",
+  "files": [
+    "lib/index.js",
+    "cordis.patch.yml"
+  ],
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  },
+  "license": "MIT",
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "^4.0.1"
+  },
+  "peerDependenciesMeta": {
+    "@deepseek-ai/cordis": {
+      "optional": true
+    }
+  }
 }
