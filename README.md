@@ -50,18 +50,26 @@ dsh plugin --profile web add "link:$(pwd)"
 [`opensource-plan.md`](./opensource-plan.md) 的环境变量约定表），全部支持环境变量覆盖
 个人路径，默认回退 `$HOME` 下通用目录。
 
-### 工程纪律 skills（对齐→实现→验证→评审）
+### 工程纪律 skills（对齐→设计→实现→验证→评审）
 
-本仓库 [`skills/`](./skills) 收录 5 个工程纪律 skill（DSH 格式 SKILL.md，源自
+本仓库 [`skills/`](./skills) 收录 13 个工程纪律 skill（DSH 格式 SKILL.md，源自
 [mattpocock/skills](https://github.com/mattpocock/skills) 的设计哲学，适配本机）：
 复制到 `~/.dsh/skills/<name>/SKILL.md` 即可被 dsh 自动加载：
 
 | Skill | 何时用 | 核心纪律 |
 |---|---|---|
 | `grilling` | 需求含糊 / 方案有分支 / 实现前 | 设计树采访：逐轮问 frontier，每个问题给推荐答案，事实自查 |
+| `grill-with-docs` | 对齐 + 沉淀文档 | grilling + 术语进 CONTEXT.md、决策进 ADR、需要时产原型 |
+| `domain-modeling` | 构建/打磨领域模型 | 挑战术语、边界场景、就地更新 CONTEXT.md 与 ADR |
+| `to-spec` | 讨论完需求要产出规格 | 综合会话与代码库理解成规格，不访谈 |
+| `to-tickets` | 拆解计划/规格为工单 | 曳光弹垂直切片工单 + 阻塞依赖（blocking edges） |
+| `codebase-design` | 设计/改进模块接口 | 深模块词汇（module/interface/seam/adapter/leverage/locality） |
+| `improve-codebase-architecture` | 架构巡检 | 扫描深化机会，HTML 报告呈现，逐条评审 |
+| `prototype` | 快速验证设计问题 | 逻辑=单 HTML 演示 / UI=同路由多变体 |
 | `tdd` | 复杂功能 / 修复缺陷 | 红灯→绿灯循环、seam 接缝预约定、垂直切片 |
 | `diagnosing-bugs` | 硬 bug / 性能回退 | 先建 tight 反馈环 → 复现最小化 → 可证伪假设 → 插桩 → 回归 |
 | `code-review` | 提交前 / 审查 PR | Standards + Spec 双轴并行子智能体，Fowler 坏味基线 |
+| `research` | 调研 / 查证 | 后台子代理对照一手来源，结论落 Markdown 逐条引用 |
 | `handoff` | 换会话 / 收尾交接 | 交接文档落临时目录、含建议技能、脱敏 |
 
 ## 环境变量约定
