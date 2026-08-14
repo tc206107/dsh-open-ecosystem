@@ -13,6 +13,7 @@
 |---|---|---|---|
 | [`dsh-desktop/`](./dsh-desktop) | 公开易复用 | Electron 原生桌面壳：attach/spawn 双模式、无边框窗口、托盘、进程台账、排版注入 | 独立应用（Windows 已验证） |
 | [`dsh-git-autoinit/`](./dsh-git-autoinit) | 公开易复用 | 任意会话/工作区自动 `git init` + 缺省 `.gitignore` 回填，侧边栏 Git 面板始终可用 | Cordis 插件（Host half） |
+| [`skills/`](./skills) | 公开易复用 | 工程纪律 skill 集（移植自 mattpocock/skills，适配 DSH）：grilling 设计树采访、tdd 红绿循环、diagnosing-bugs 六阶段调试、code-review 双轴评审、handoff 会话交接 | DSH skills（SKILL.md） |
 | [`opensource-plan.md`](./opensource-plan.md) | 文档 | 全部集成操作的盘点、分类（公开/特化）与开源规划 | 文档 |
 | `readmes/` · `research_repos/` · `report/` | 调研 | dsh-plugin 生态扫描、6 类分类法、落地路线 | 材料 |
 
@@ -48,6 +49,20 @@ dsh plugin --profile web add "link:$(pwd)"
 各环境适配脚本位于 `~/.dsh/skills/<name>/scripts/`（发布形态见
 [`opensource-plan.md`](./opensource-plan.md) 的环境变量约定表），全部支持环境变量覆盖
 个人路径，默认回退 `$HOME` 下通用目录。
+
+### 工程纪律 skills（对齐→实现→验证→评审）
+
+本仓库 [`skills/`](./skills) 收录 5 个工程纪律 skill（DSH 格式 SKILL.md，源自
+[mattpocock/skills](https://github.com/mattpocock/skills) 的设计哲学，适配本机）：
+复制到 `~/.dsh/skills/<name>/SKILL.md` 即可被 dsh 自动加载：
+
+| Skill | 何时用 | 核心纪律 |
+|---|---|---|
+| `grilling` | 需求含糊 / 方案有分支 / 实现前 | 设计树采访：逐轮问 frontier，每个问题给推荐答案，事实自查 |
+| `tdd` | 复杂功能 / 修复缺陷 | 红灯→绿灯循环、seam 接缝预约定、垂直切片 |
+| `diagnosing-bugs` | 硬 bug / 性能回退 | 先建 tight 反馈环 → 复现最小化 → 可证伪假设 → 插桩 → 回归 |
+| `code-review` | 提交前 / 审查 PR | Standards + Spec 双轴并行子智能体，Fowler 坏味基线 |
+| `handoff` | 换会话 / 收尾交接 | 交接文档落临时目录、含建议技能、脱敏 |
 
 ## 环境变量约定
 
