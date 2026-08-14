@@ -38,8 +38,17 @@ cd dsh-git-autoinit
 npm install
 # 在 web profile 挂载（本地路径）
 dsh plugin --profile web add "link:$(pwd)"
-# 或发布后：dsh plugin --profile web add dsh-git-autoinit
+# 或从 npm 安装（见下方 24 小时限制说明）
+dsh plugin --profile web add dsh-git-autoinit
 ```
+
+> ⚠️ **npm 安装路径的 24 小时限制**：pnpm 11 的供应链策略 `minimumReleaseAge`
+> 会拒绝安装发布不足 24 小时的新版本。`dsh-git-autoinit@0.1.1` 发布于
+> 2026-08-14 06:49 UTC，因此在 **2026-08-15 06:49 UTC 之前**，`dsh plugin add dsh-git-autoinit`
+> 会被 pnpm 拦截（报 "minimumReleaseAge" 相关提示并回退到旧版本或失败）。
+> 此限制自动过期，无需任何操作；到期后即可正常安装。若需立即安装，可手动把
+> `dsh-git-autoinit@0.1.1` 加入 profile 的 `pnpm-workspace.yaml` 的
+> `minimumReleaseAgeExclude` 列表（详见 [`docs/npm-publish.md`](./docs/npm-publish.md)）。
 
 插件挂载后，对每个已有会话/工作区目录幂等执行 `git init`（已存在则跳过），
 并仅在目录无 `.gitignore` 时回填保守忽略规则。数据落盘见 `~/.dsh/desktop/processes.json` 等。
