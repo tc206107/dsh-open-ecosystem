@@ -1,0 +1,91 @@
+/*
+ * dsh-desktop – global typography override
+ * Applied to the Harness web GUI inside the desktop window via
+ *   mainWindow.webContents.insertCSS(...) on dom-ready.
+ *
+ * Rules (same set as the live cordis typo-1/pkg-2 plugin):
+ *   - Chinese headings/titles            -> 楷体 KaiTi
+ *   - UI & input/output body text        -> 新宋 NSimSun
+ *   - English letters & digits (Latin)   -> Times New Roman
+ *   - All font sizes reduced uniformly by 2px
+ */
+:root {
+  --dsh-typ-title: "Times New Roman", "Times", "KaiTi", "楷体", "STKaiti", "华文楷体", serif;
+  --dsh-typ-body:  "Times New Roman", "Times", "NSimSun", "新宋体", "宋体", "SimSun", serif;
+
+  /* ---- titles (headings) -> 楷体 ---- */
+  --dsw-font-xl-24-font-family: var(--dsh-typ-title) !important;
+  --dsw-font-markdown-h1-font-family: var(--dsh-typ-title) !important;
+  --dsw-font-markdown-h2-font-family: var(--dsh-typ-title) !important;
+  --dsw-font-markdown-h3-font-family: var(--dsh-typ-title) !important;
+  --dsw-font-markdown-h4-font-family: var(--dsh-typ-title) !important;
+
+  /* ---- body & UI -> 新宋 (NSimSun) ---- */
+  --dsw-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-base-16-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-base-strong-16-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-l-20-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-m-18-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-s-14-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-s-strong-14-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xs-13-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xs-strong-13-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xxs-12-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xxs-strong-12-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xxxs-11-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-xxxs-strong-11-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-base-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-base-italic-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-base-strong-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-base-strong-italic-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-small-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-small-italic-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-small-strong-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-small-strong-italic-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-code-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-code-block-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-code-block-small-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-table-font-family: var(--dsh-typ-body) !important;
+  --dsw-font-markdown-table-head-font-family: var(--dsh-typ-body) !important;
+
+  /* ---- uniform -2px on every size token ---- */
+  --dsw-font-base-16-font-size: 14px !important;
+  --dsw-font-base-strong-16-font-size: 14px !important;
+  --dsw-font-l-20-font-size: 18px !important;
+  --dsw-font-m-18-font-size: 14px !important;
+  --dsw-font-s-14-font-size: 12px !important;
+  --dsw-font-s-strong-14-font-size: 12px !important;
+  --dsw-font-xl-24-font-size: 22px !important;
+  --dsw-font-xs-13-font-size: 11px !important;
+  --dsw-font-xs-strong-13-font-size: 11px !important;
+  --dsw-font-xxs-12-font-size: 10px !important;
+  --dsw-font-xxs-strong-12-font-size: 10px !important;
+  --dsw-font-xxxs-11-font-size: 9px !important;
+  --dsw-font-xxxs-strong-11-font-size: 9px !important;
+  --dsw-font-markdown-h1-font-size: 22px !important;
+  --dsw-font-markdown-h2-font-size: 20px !important;
+  --dsw-font-markdown-h3-font-size: 18px !important;
+  --dsw-font-markdown-h4-font-size: 14px !important;
+  --dsw-font-markdown-base-font-size: 14px !important;
+  --dsw-font-markdown-base-italic-font-size: 14px !important;
+  --dsw-font-markdown-base-strong-font-size: 14px !important;
+  --dsw-font-markdown-base-strong-italic-font-size: 14px !important;
+  --dsw-font-markdown-small-font-size: 12px !important;
+  --dsw-font-markdown-small-italic-font-size: 12px !important;
+  --dsw-font-markdown-small-strong-font-size: 12px !important;
+  --dsw-font-markdown-small-strong-italic-font-size: 12px !important;
+  --dsw-font-markdown-code-font-size: 12px !important;
+  --dsw-font-markdown-code-block-font-size: 11px !important;
+  --dsw-font-markdown-code-block-small-font-size: 10px !important;
+  --dsw-font-markdown-table-font-size: 13px !important;
+  --dsw-font-markdown-table-head-font-size: 13px !important;
+}
+
+/* ---- element-level fallbacks (no cascade path can bypass) ---- */
+html, body, div, span, p, a, li, td, th, button, input, textarea, select, label,
+small, strong, em, cite, pre, code {
+  font-family: var(--dsh-typ-body) !important;
+}
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--dsh-typ-title) !important;
+}

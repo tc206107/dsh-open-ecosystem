@@ -1,0 +1,12 @@
+# 打包的 Electron 桌面应用（构建产物，数百 MB 二进制）
+/DeepSeek Harness Desktop/
+
+# dsh-desktop 源码目录内的依赖与构建产物（该目录自带 .gitignore，这里兜底）
+dsh-desktop/node_modules/
+dsh-desktop/dist/
+
+# 通用
+*.log
+.DS_Store
+Thumbs.db
+desktop.ini
